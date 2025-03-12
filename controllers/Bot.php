@@ -8,7 +8,7 @@ class Bot {
 	private        $text;
 	private string $firstName;
 	private int    $userId;
-	private	       $img;
+	private        $img;
 	private string $api;
 	private        $http;
 
@@ -30,7 +30,7 @@ class Bot {
 		//match ($this->text) {
 		//	'/start' => $this->handleStartCommand(),
 		//	$this->text => $this->sendQrImage(),
-		//	$this->img => $this->sendPhotoText(),
+		//	$this->img => $thinder($qrText, $qrFiles->sendPhotoText(),
     //};
     if ($this->text === '/start') {
       $this->handleStartCommand();
@@ -62,39 +62,36 @@ class Bot {
 			'multipart' => [
 				['name' => 'chat_id', 'contents' => $this->userId],
 				['name' => 'photo', 'contents' => fopen($qrFile,'r')]
-			]	
+			]
 		]);
 	}
-	
-//   public function sendPhotoText() {
-//     $fileInfo = $this->http->get("getFile", [
-//       'query' => ['file_id' => $this->img]
-//     ]);
-//     $fileInfo = json_decode($fileInfo->getBody()->getContents(), true);
 
-//     if (!$fileInfo['ok']) {
-//       $this->http->post("sendMessage", [
-//         'form_params' => [
-//           'chat_id' => $this->userId,
-//           'text' => "Rasmni olishda xatolik"
-//         ]
-//       ]);
-//       return;
-//     }
-
-// 		$this->http->post('sendMessage', [
-// 			'form_params' => [
-// 				'chat_id' => $this->userId,
-// 				'text' => $fileInfo
-// 			]
-//     ]);
-// 	}
 public function sendPhotoText() {
   if (!$this->img) {
       return;
   }
+  $getFileUrl = $this->api . "getFile?file_id=" . $this->img;
+  $response = file_get_contents($getFileUrl);
+  $fileInfo = json_decode($response, true);
+  $filePath = $fileInfo['result']['file_path'];
+  $fileUrl = "http://api.telegram.org/file/bot7589345403:AAFn6WkXEB3JalFZFuxO78hQPpgFd52s0Aw/" . $filePath;
+  //$imageData = file_get_contents($fileUrl);
+  //file_put_contents("qrCode.png", $imageData);
 
-  // 1. Telegram serveridan rasm haqida ma'lumot olish
+  try {
+    $qrReader = new QRCode();
+    $res = $qrReader->readFromFile("qr__new.png");
+  } catch (Exception $e) {
+      $res = "❌ QR kod o‘qib bo‘lmadi! Xato: " . $e->getMessage();
+  }
+  $this->http->post('sendMessage', [
+      'form_params' => [
+          'chat_id' => $this->userId,
+          'text' => print_r($res, true)
+      ]
+  ]);
+
+  exit();
   $response = $this->http->get("getFile", [
       'query' => ['file_id' => $this->img]
   ]);
@@ -111,11 +108,8 @@ public function sendPhotoText() {
       return;
   }
 
-  // 2. Telegram serveridagi faylga to‘g‘ri URL yaratish
   $filePath = $fileInfo['result']['file_path'];
   $fileUrl = "https://api.telegram.org/file/bot" . str_replace("https://api.telegram.org/bot", "", $this->api) . "/" . $filePath;
-
-  // 3. Faylni yuklab olish
   $fileData = file_get_contents($fileUrl);
   file_put_contents("qrCode.png" ,$fileData);
   if ($fileData === false) {
@@ -129,7 +123,7 @@ public function sendPhotoText() {
   }
 
     try {
-      $res = (new QRCode)->readFromFile("../qrCode.png");
+      $res = (new QRCode)->readFromFile(__DIR__ . "/../qrCode.png");
     } catch (\Exception $e) {
       $res = $e->getMessage();
     }

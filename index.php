@@ -2,16 +2,14 @@
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
-//require 'controllers/Web.php';
-//require 'controllers/Bot.php';
 
-//use controllers\Bot;
+use Voris\Bot;
 
 //$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 //$dotenv->load();
 //$update = file_get_contents('php://input');
 //if($update) {
-//	(new Bot($_ENV['TOKEN']))->handle($update);
+	//(new Bot($_ENV['TOKEN']))->handle($update);
 //}
 //exit();
 use chillerlan\QRCode\QRCode;

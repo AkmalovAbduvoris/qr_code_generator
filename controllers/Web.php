@@ -5,7 +5,7 @@ namespace Voris;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 
-class Web {
+class Web implements QRCodeInterface {
     public function createQRCode(string $qrText): void {
         $options = new QROptions([
             'outputType' => QRCode::OUTPUT_IMAGE_PNG,
@@ -20,7 +20,7 @@ class Web {
     public function readQRCode(string $filePath): string {
         if (file_exists($filePath)) {
             try {
-                $result = (new QRCode)->readFromFile($filePath);
+                $result = (new QRCode)->readFromFile("qr__new");
                 return (string) $result;
             } catch (\Throwable $e) {
                 return "Xato: " . $e->getMessage();
