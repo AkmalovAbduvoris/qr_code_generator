@@ -75,12 +75,12 @@ public function sendPhotoText() {
   $fileInfo = json_decode($response, true);
   $filePath = $fileInfo['result']['file_path'];
   $fileUrl = "http://api.telegram.org/file/bot7589345403:AAFn6WkXEB3JalFZFuxO78hQPpgFd52s0Aw/" . $filePath;
-  //$imageData = file_get_contents($fileUrl);
-  //file_put_contents("qrCode.png", $imageData);
+  $imageData = file_get_contents($fileUrl);
+  file_put_contents("qrCode.png", $imageData);
 
   try {
     $qrReader = new QRCode();
-    $res = $qrReader->readFromFile("qr__new.png");
+    $res = $qrReader->readFromFile("qrCode.png");
   } catch (Exception $e) {
       $res = "❌ QR kod o‘qib bo‘lmadi! Xato: " . $e->getMessage();
   }

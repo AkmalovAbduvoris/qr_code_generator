@@ -18,15 +18,27 @@ class Web implements QRCodeInterface {
     }
 
     public function readQRCode(string $filePath): string {
-        if (file_exists($filePath)) {
-            try {
-                $result = (new QRCode)->readFromFile("qr__new");
-                return (string) $result;
-            } catch (\Throwable $e) {
-                return "Xato: " . $e->getMessage();
-            }
-        } else {
-            return "Fayl topilmadi";
+        if (!file_exists($filePath)) {
+            return "Xato: Fayl topilmadi - $filePath";
+        }
+        
+        // Validate file extension
+        $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        $allowedExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+        
+        if (!in_array($extension, $allowedExtensions)) {
+            return "Xato: Noto'g'ri fayl formati. Qo'llab-quvvatlanadigan formatlar: " . implode(', ', $allowedExtensions);
+        }
+        
+        try {
+            $result = (new QRCode)->readFromFile($filePath);
+            return (string) $result;
+        } catch (\Exception $e) {
+            return "Xato: QR kodni o'qishda xatolik - " . $e->getMessage();
+        } catch (\Error $e) {
+            return "Xato: Tizim xatosi - " . $e->getMessage();
+        } catch (\Throwable $e) {
+            return "Xato: Kutilmagan xatolik - " . $e->getMessage();
         }
     }
 }
