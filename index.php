@@ -5,13 +5,13 @@ require 'vendor/autoload.php';
 
 use Voris\Bot;
 
-//$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-//$dotenv->load();
-//$update = file_get_contents('php://input');
-//if($update) {
-	//(new Bot($_ENV['TOKEN']))->handle($update);
-//}
-//exit();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+$update = file_get_contents('php://input');
+if($update) {
+	(new Bot($_ENV['TOKEN']))->handle($update);
+}
+exit();
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Voris\Web;
