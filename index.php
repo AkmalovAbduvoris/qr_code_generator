@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
-require 'controllers/Web.php';
-require 'controllers/Bot.php';
+//require 'controllers/Web.php';
+//require 'controllers/Bot.php';
 
 //use controllers\Bot;
 
@@ -16,7 +16,7 @@ require 'controllers/Bot.php';
 //exit();
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
-use controllers\Web;
+use Voris\Web;
 
 if (isset($_GET['text'])) {
     (new Web())->createQRCode($_GET['text']);

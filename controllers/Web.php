@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace controllers;
+namespace Voris;
 
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
